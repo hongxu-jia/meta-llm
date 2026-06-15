@@ -1,0 +1,80 @@
+From 7d7a097c9a1a5b03de76f809e90facc54288902b Mon Sep 17 00:00:00 2001
+From: Hongxu Jia <hongxu.jia@windriver.com>
+Date: Tue, 20 Jan 2026 14:44:18 +0800
+Subject: [PATCH] fix NVCC compilation error: exception specification is
+ incompatible with that of previous function "cospi"
+
+Refer [1][2], patching the relevant header (math_functions.h) to bring
+the noexcept specification in line with your system's glibc header
+
+[1] https://stackoverflow.com/questions/79594396/nvcc-compilation-error-exception-specification-is-incompatible-with-that-of-pre
+[2] https://forums.developer.nvidia.com/t/error-exception-specification-is-incompatible-for-cospi-sinpi-cospif-sinpif-with-glibc-2-41/323591?u=epk
+
+Upstream-Status: Pending
+
+Signed-off-by: Hongxu Jia <hongxu.jia@windriver.com>
+---
+ usr/local/cuda-12.6/include/crt/math_functions.h | 12 ++++++------
+ 1 file changed, 6 insertions(+), 6 deletions(-)
+
+diff --git a/usr/local/cuda-12.6/targets/x86_64-linux/include/crt/math_functions.h b/usr/local/cuda-12.6/targets/x86_64-linux/include/crt/math_functions.h
+index 3fd50e6..3492dfb 100644
+--- a/usr/local/cuda-12.6/targets/x86_64-linux/include/crt/math_functions.h
++++ b/usr/local/cuda-12.6/targets/x86_64-linux/include/crt/math_functions.h
+@@ -588,7 +588,7 @@ extern __DEVICE_FUNCTIONS_DECL__ __device_builtin__ double         __cdecl sqrt(
+  *
+  * \note_accuracy_double
+  */
+-extern __DEVICE_FUNCTIONS_DECL__ __device_builtin__ double                 rsqrt(double x);
++extern __DEVICE_FUNCTIONS_DECL__ __device_builtin__ double                 rsqrt(double x) noexcept(true);
+ 
+ /**
+  * \ingroup CUDA_MATH_SINGLE
+@@ -612,7 +612,7 @@ extern __DEVICE_FUNCTIONS_DECL__ __device_builtin__ double                 rsqrt
+  *
+  * \note_accuracy_single
+  */
+-extern __DEVICE_FUNCTIONS_DECL__ __device_builtin__ float                  rsqrtf(float x);
++extern __DEVICE_FUNCTIONS_DECL__ __device_builtin__ float                  rsqrtf(float x) noexcept(true);
+ 
+ #if defined(__QNX__) && !defined(_LIBCPP_VERSION)
+ namespace std {
+@@ -2547,7 +2547,7 @@ extern __DEVICE_FUNCTIONS_DECL__ __device_builtin__ float                  rcbrt
+  *
+  * \note_accuracy_double
+  */
+-extern __DEVICE_FUNCTIONS_DECL__ __device_builtin__ double                 sinpi(double x);
++extern __DEVICE_FUNCTIONS_DECL__ __device_builtin__ double                 sinpi(double x) noexcept (true);
+ /**
+  * \ingroup CUDA_MATH_SINGLE
+  * \brief Calculate the sine of the input argument 
+@@ -2570,7 +2570,7 @@ extern __DEVICE_FUNCTIONS_DECL__ __device_builtin__ double                 sinpi
+  *
+  * \note_accuracy_single
+  */
+-extern __DEVICE_FUNCTIONS_DECL__ __device_builtin__ float                  sinpif(float x);
++extern __DEVICE_FUNCTIONS_DECL__ __device_builtin__ float                  sinpif(float x) noexcept(true);
+ /**
+  * \ingroup CUDA_MATH_DOUBLE
+  * \brief Calculate the cosine of the input argument 
+@@ -2592,7 +2592,7 @@ extern __DEVICE_FUNCTIONS_DECL__ __device_builtin__ float                  sinpi
+  *
+  * \note_accuracy_double
+  */
+-extern __DEVICE_FUNCTIONS_DECL__ __device_builtin__ double                 cospi(double x);
++extern __DEVICE_FUNCTIONS_DECL__ __device_builtin__ double                 cospi(double x) noexcept (true);;
+ /**
+  * \ingroup CUDA_MATH_SINGLE
+  * \brief Calculate the cosine of the input argument 
+@@ -2614,7 +2614,7 @@ extern __DEVICE_FUNCTIONS_DECL__ __device_builtin__ double                 cospi
+  *
+  * \note_accuracy_single
+  */
+-extern __DEVICE_FUNCTIONS_DECL__ __device_builtin__ float                  cospif(float x);
++extern __DEVICE_FUNCTIONS_DECL__ __device_builtin__ float                  cospif(float x) noexcept(true);
+ /**
+  * \ingroup CUDA_MATH_DOUBLE
+  * \brief  Calculate the sine and cosine of the first input argument 
+-- 
+2.34.1
+
