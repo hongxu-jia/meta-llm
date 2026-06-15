@@ -1,0 +1,12 @@
+[Unit]
+Description=Setup NVIDIA Deive Daemon
+
+[Service]
+Type=forking
+Restart=on-failure
+# Wait for 10 seconds before the next restart attempt
+RestartSec=10
+ExecStart=/usr/sbin/nvidia-smi
+
+[Install]
+WantedBy=multi-user.target
