@@ -1,0 +1,31 @@
+From a4bb691ea57c4bdcbbcde7debc05dfe459038d8b Mon Sep 17 00:00:00 2001
+From: Hongxu Jia <hongxu.jia@windriver.com>
+Date: Mon, 13 Apr 2026 15:33:05 +0800
+Subject: [PATCH] x/mlxrunner/mlx/memory.go: fix overflows int
+
+Build failed on 32bit arm
+
+|x/mlxrunner/mlx/memory.go:40:11: 1 << (4 * 10) (untyped int constant 1099511627776) overflows int
+
+Upstream-Status: Inappropriate [Wind River Linux specific]
+Signed-off-by: Hongxu Jia <hongxu.jia@windriver.com>
+---
+ x/mlxrunner/mlx/memory.go | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/x/mlxrunner/mlx/memory.go b/x/mlxrunner/mlx/memory.go
+index a243b72..f255534 100644
+--- a/x/mlxrunner/mlx/memory.go
++++ b/x/mlxrunner/mlx/memory.go
+@@ -37,7 +37,7 @@ func PrettyBytes(n int) fmt.Stringer {
+ 		return KibiByte(n)
+ 	case n < 1<<(3*10):
+ 		return MebiByte(n)
+-	case n < 1<<(4*10):
++	case int64(n) < 1<<(4*10):
+ 		return GibiByte(n)
+ 	default:
+ 		return TebiByte(n)
+-- 
+2.34.1
+

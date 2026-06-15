@@ -1,0 +1,26 @@
+From 9a567d277ec1458d0027ad9ec3dabd612f2b958c Mon Sep 17 00:00:00 2001
+From: Hongxu Jia <hongxu.jia@windriver.com>
+Date: Mon, 13 Apr 2026 18:21:53 +0800
+Subject: [PATCH] support 32bit x86
+
+|undefined reference to `ggml_quantize_mat_q8_0_4x8'
+
+Upstream-Status: Inappropriate [Wind River Linux specific]
+Signed-off-by: Hongxu Jia <hongxu.jia@windriver.com>
+---
+ ml/backend/ggml/ggml/src/ggml-cpu/cpu_x86.go | 3 +++
+ 1 file changed, 3 insertions(+)
+ create mode 100644 ml/backend/ggml/ggml/src/ggml-cpu/cpu_x86.go
+
+diff --git a/ml/backend/ggml/ggml/src/ggml-cpu/cpu_x86.go b/ml/backend/ggml/ggml/src/ggml-cpu/cpu_x86.go
+new file mode 100644
+index 0000000..4743a0d
+--- /dev/null
++++ b/ml/backend/ggml/ggml/src/ggml-cpu/cpu_x86.go
+@@ -0,0 +1,3 @@
++package cpu
++
++import _ "github.com/ollama/ollama/ml/backend/ggml/ggml/src/ggml-cpu/arch/x86"
+-- 
+2.34.1
+

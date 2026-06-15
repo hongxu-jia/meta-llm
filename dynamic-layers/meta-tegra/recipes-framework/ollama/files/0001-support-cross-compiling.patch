@@ -1,0 +1,34 @@
+From bbadc3f0f132f40fefdf0d5647ef703c8b510782 Mon Sep 17 00:00:00 2001
+From: Hongxu Jia <hongxu.jia@windriver.com>
+Date: Wed, 8 Apr 2026 20:34:04 -0700
+Subject: [PATCH] support cross compiling
+
+Use target directory to instead of native directory
+
+The cuda_toolchain.cmake in meta-tegra defines var-CUDA_TOOLKIT_TARGET_DIR
+for cross compiling
+
+Upstream-Status: Inappropriate [Yocto specific]
+
+Rebase to 0.20.3
+Signed-off-by: Hongxu Jia <hongxu.jia@windriver.com>
+---
+ CMakeLists.txt | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index fa4305d9..035595b1 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -119,7 +119,7 @@ if(CMAKE_CUDA_COMPILER)
+     target_include_directories(ggml-cuda PRIVATE ${GGML_INCLUDE_DIRS})
+     install(TARGETS ggml-cuda
+         RUNTIME_DEPENDENCIES
+-            DIRECTORIES ${CUDAToolkit_BIN_DIR} ${CUDAToolkit_BIN_DIR}/x64 ${CUDAToolkit_LIBRARY_DIR}
++            DIRECTORIES ${CUDA_TOOLKIT_TARGET_DIR}/bin ${CUDA_TOOLKIT_TARGET_DIR}/lib  ${CUDAToolkit_BIN_DIR} ${CUDAToolkit_BIN_DIR}/x64 ${CUDAToolkit_LIBRARY_DIR}
+             PRE_INCLUDE_REGEXES cublas cublasLt cudart
+             PRE_EXCLUDE_REGEXES ".*"
+         RUNTIME DESTINATION ${OLLAMA_INSTALL_DIR} COMPONENT CUDA
+-- 
+2.49.0
+
