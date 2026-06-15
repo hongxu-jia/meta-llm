@@ -1,0 +1,10 @@
+[Unit]
+Description=#MODEL_NAME# Service
+After=network-online.target
+
+[Service]
+ExecStart=#MODEL_SERVICE_CMD#
+Environment="PATH=/usr/bin:/bin:/usr/sbin:/sbin"
+
+[Install]
+WantedBy=default.target
